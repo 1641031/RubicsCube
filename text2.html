@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>html5 调用本地摄像头</title>
+    <style type="text/css">
+        html,
+        body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        video {
+            width: 420px;
+            height: 237px;
+        }
+
+        canvas {
+            /* width: 500px;
+            height: 500px;    */
+            /* position: absolute; */
+            left: 500px;
+            top: 200px;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video" autoplay="autoplay" style="background: #ccc;"></video>
+    <canvas id="canvas" width="420" height="237">1212</canvas>
+    <button id="button">button</button>
+    <button id="clip">裁剪</button>
+    <img id='img' src=''>
+    <script type="text/javascript">
+
+
+
+        //获取video的DOM
+        var video = document.getElementById("video");
+        //获得【渲染2d上下文】和它的【绘画功能】
+        var context = canvas.getContext("2d");
+        //报错函数
+        var errocb = function (code) {
+            alert(code);
+        };
+        //API参考网站：https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/getUserMedia
+        // navigator.getUserMedia 该特性已经从 Web 标准中删除（作用：已废弃的API版本仅为了向后兼容而存在）
+        // navigator.mediaDevices.getUserMedia 为最新标准
+        //定义变量navigatorALL 来
+        // var navigatorAll = navigator.mediaDevices.getUserMedia ? navigator.mediaDevices : navigator;
+        // 问题1：调用navigator.mediaDevices.getUserMedia 的函数后，无法开启视频
+
+        navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia;
+
+        // var navigatorAll = navigator.getUserMedia ?  navigator : navigator.mediaDevices;
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia({
+                "video": true
+            }, function (stream) {
+                video.srcObject = stream;
+                video.play();
+            }, errocb);
+        }
+
+        //设置定时器setInterval[每多少时间就执行一次里面的内容]
+ 
+        window.setInterval(function () {
+            //摄像头的图像 映射到canvas上
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // 执行画辅助线函数
+            draw(200);
+        }, 15);
+
+        //画一个正方形辅助线，便于后面剪辑图片。
+        //辅助线的宽度【正方体】
+        // var drawLine = 200;
+        function draw(drawLine) {
+            context.strokeStyle = "rgba(204,255, 0,0.5)";
+            context.lineWidth = 5;
+            context.strokeRect(canvas.width / 2 - drawLine / 2, canvas.height / 2 - drawLine / 2, drawLine, drawLine);
+        }
+    </script>
+
+    <script>
+        //捕捉画面区域
+        var button = document.getElementById('button'),
+            img = document.getElementById('img');
+        button.addEventListener('click', function () {
+            //绘制canvas图形
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            draw(200);
+            //把canvas图像转为img图片
+            img.src = canvas.toDataURL("image/png");
+
+        })
+    </script>
+
+</body>
+
+</html>

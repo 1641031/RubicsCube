@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <form>
+                <fieldset>
+                  <legend>Fruit juice size</legend>
+                  <p>
+                    <input type="radio" name="size" id="size_1" value="small">
+                    <label for="size_1">Small</label>
+                  </p>
+                  <p>
+                    <input type="radio" name="size" id="size_2" value="medium">
+                    <label for="size_2">Medium</label>
+                  </p>
+                  <p>
+                    <input type="radio" name="size" id="size_3" value="large">
+                    <label for="size_3">Large</label>
+                  </p>
+                </fieldset>
+              </form>
+        <canvas id="myCanvas" width=500 height=500></canvas>
+        <form name='test'>
+              <input type="file" name='file'>
+              <button id="clip">裁剪</button>
+              <input type="submit" value="提交">
+            </form>
+            <form action="">
+                input
+            </form>
+            <div id="display"></div>
+    <script>
+            var canvas = document.querySelector('canvas'),
+        ctx = canvas.getContext('2d'),
+        preview = new Image();
+    document.test.file.addEventListener('change', function() {
+      var fr = new FileReader();
+      fr.onload = function() {
+        preview.src = this.result;
+        canvas.width = preview.width;
+        canvas.height = preview.height;
+        drawImage();
+      };
+      fr.readAsDataURL(this.files[0]);
+    })
+
+// var canvas = document.getElementById("mycanvas");
+// var ctx = canvas.getContext("2d");
+
+    // var c = ctx.getImageData(mouseX, mouseY, 1, 1).data;
+    // var red = c[0];
+    // var green = c[1];
+    // var blue = c[2];
+    // var display = window.document.getElementById("display");
+    // display.innerHTML = "red:" + red + ",green:" + green + ",blue:" + blue
+    </script>
+</body>
+</html>
